@@ -21,21 +21,36 @@
         </b-row>
       </b-col>
       <b-col cols="6">
-        <h1>Jogo da Vida</h1>
-        <ul>
-          <li>Qualquer célula viva com menos de dois vizinhos vivos morre de solidão.</li>
-          <li>Qualquer célula viva com mais de três vizinhos vivos morre de superpopulação.</li>
-          <li>Qualquer célula com exatamente três vizinhos vivos se torna uma célula viva.</li>
-          <li>Qualquer célula com dois vizinhos vivos continua no mesmo estado para a próxima geração.</li>
-        </ul>
-        <b-button @click="novaGeracaoHandler">Nova Geração</b-button>
-        <b-button @click="geracaoAutomaticaHandler">Geração Atutomatica</b-button>
+        <b-row align-h="center">
+          <b-col>
+            <h1>Jogo da Vida</h1>
+          </b-col>
+        </b-row>
+        <b-row>
+          <b-col>
+            <ul>
+              <li>Qualquer célula viva com menos de dois vizinhos vivos morre de solidão.</li>
+              <li>Qualquer célula viva com mais de três vizinhos vivos morre de superpopulação.</li>
+              <li>Qualquer célula com exatamente três vizinhos vivos se torna uma célula viva.</li>
+              <li>Qualquer célula com dois vizinhos vivos continua no mesmo estado para a próxima geração.</li>
+            </ul>
+          </b-col>
+        </b-row>
+        <b-row align-h="center">
+          <b-col cols="4">
+            <b-button @click="novaGeracaoHandler">Nova Geração</b-button>
+          </b-col>
+          <b-col cols="4">
+            <b-button @click="geracaoAutomaticaHandler">Geração Atutomatica</b-button>
+          </b-col>
+        </b-row>
       </b-col>
     </b-row>
   </b-container>
 </template>
 
 <script>
+import { setTimeout } from 'timers';
 export default {
   data () {
     return {
@@ -95,9 +110,10 @@ export default {
       })
 
     },
-    geracaoAutomaticaHandler () {
+    async geracaoAutomaticaHandler () {
       while (true) {
-        setTimeout(this.novaGeracaoHandler, 1000);
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        this.novaGeracaoHandler();
       }
     }
   }
