@@ -41,7 +41,10 @@
             <b-button @click="novaGeracaoHandler">Nova Geração</b-button>
           </b-col>
           <b-col cols="4">
-            <b-button @click="geracaoAutomaticaHandler">Geração Atutomatica</b-button>
+            <b-button
+              :variant="geracaoAutomatica?'success':'danger'"
+              @click="geracaoAutomaticaHandler"
+            >Geração Atutomatica</b-button>
           </b-col>
         </b-row>
       </b-col>
@@ -55,34 +58,27 @@ export default {
   data () {
     return {
       tamanhoMatriz: 20,
-      mapState: []
+      mapState: [],
+      geracaoAutomatica: false
     }
   },
   beforeMount () {
-    console.log("Aqui");
     for (let x of range(0, this.tamanhoMatriz - 1)) {
-      console.log("X=", x);
       this.mapState.push([]);
       for (let y of range(0, this.tamanhoMatriz - 1)) {
         this.mapState[x].push({ atual: false, novo: false });
-        console.log(x, "/", y, "=", this.mapState[x][y]);
       }
     }
   },
   methods: {
     celulaClickHandler (x, y) {
-      console.log("Antes ", this.mapState[x][y]);
       this.mapState[x][y].atual = !this.mapState[x][y].atual;
       this.$set(this.mapState[x], y, this.mapState[x][y]);
-      // this.mapState[x][y] = !this.mapState[x][y];
-      console.log("Depois ", this.mapState[x][y]);
     },
     celulaVivaOuMortaHandler (state) {
       return state.atual ? "celula-viva" : "celula-morta";
     },
     novaGeracaoHandler () {
-
-      console.log("NovaGeraçao");
       this.mapState.forEach((linha, x) => {
         linha.forEach((item, y) => {
           let vizinhosVivos = 0;
@@ -111,8 +107,9 @@ export default {
 
     },
     async geracaoAutomaticaHandler () {
-      while (true) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      this.geracaoAutomatica = !this.geracaoAutomatica;
+      while (this.geracaoAutomatica) {
+        await new Promise(resolve => setTimeout(resolve, 500));
         this.novaGeracaoHandler();
       }
     }
